@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Statistics
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+<div class="dashboard-header">
+
+<h1>
+Task Statistics
+</h1>
+
+<p>
+Overview of your productivity.
+</p>
+
+
+</div>
+
+
+
+
+
+<div class="task-box">
+
+
+<h2>
+Completion Status
+</h2>
+
+
+<canvas id="statusChart"></canvas>
+
+
+</div>
+
+
+
+
+
+
+<div class="task-box">
+
+
+<h2>
+Priority Breakdown
+</h2>
+
+
+<canvas id="priorityChart"></canvas>
+
+
+</div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+
+
+new Chart(
+
+document.getElementById("statusChart"),
+
+{
+
+type: "pie",
+
+data: {
+
+labels: [
+
+"Completed",
+
+"Pending"
+
+],
+
+
+datasets: [
+
+{
+
+data: [
+
+{{ completed }},
+
+{{ pending }}
+
+]
+
+}
+
+]
+
+
+}
+
+
+}
+
+);
+
+
+
+
+
+
+
+new Chart(
+
+document.getElementById("priorityChart"),
+
+{
+
+type: "bar",
+
+
+data: {
+
+
+labels: [
+
+"High",
+
+"Medium",
+
+"Low"
+
+],
+
+
+
+datasets: [
+
+{
+
+label: "Tasks",
+
+data: [
+
+{{ high }},
+
+{{ medium }},
+
+{{ low }}
+
+]
+
+}
+
+]
+
+
+}
+
+
+}
+
+);
+
+
+
+</script>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+        VA Task Dashboard
+        {% endblock %}
+    </title>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+    <h2>
+        VA Task Dashboard
+    </h2>
+
+
+    {% if current_user.is_authenticated %}
+
+    <div>
+
+        <span>
+            Welcome, {{ current_user.name }}
+        </span>
+
+
+        <a href="/">
+            Dashboard
+        </a>
+
+
+        <a href="/stats">
+            Statistics
+        </a>
+
+
+        <a href="/export">
+            Export
+        </a>
+
+
+        <a href="/logout">
+            Logout
+        </a>
+
+
+    </div>
+
+    {% endif %}
+
+
+</nav>
+
+
+
+
+
+<div class="container">
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+
+{% for category, message in messages %}
+
+<div class="alert {{ category }}">
+
+{{ message }}
+
+</div>
+
+
+{% endfor %}
+
+
+{% endif %}
+
+{% endwith %}
+
+
+
+
+
+{% block content %}
+
+{% endblock %}
+
+
+
+
+
+</div>
+
+
+
+</body>
+
+
+</html>

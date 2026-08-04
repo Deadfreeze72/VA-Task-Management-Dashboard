@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+
+{% block content %}
+
+<div class="auth-box">
+
+    <h2>Create Account</h2>
+
+
+    <form method="POST" autocomplete="off">
+
+
+        <label>
+            Full Name
+        </label>
+
+        <input 
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            autocomplete="off"
+            required>
+
+
+
+        <label>
+            Email Address
+        </label>
+
+        <input 
+            type="email"
+            name="email"
+            placeholder="example@email.com"
+            autocomplete="off"
+            required>
+
+
+
+        <label>
+            Password
+        </label>
+
+        <input 
+            type="password"
+            name="password"
+            placeholder="Create password"
+            autocomplete="new-password"
+            required>
+
+
+
+        <label>
+            Confirm Password
+        </label>
+
+        <input 
+            type="password"
+            name="confirm_password"
+            placeholder="Confirm password"
+            autocomplete="new-password"
+            required>
+
+
+
+        <button type="submit">
+            Register
+        </button>
+
+
+    </form>
+
+
+    <p>
+        Already have an account?
+        <a href="/login">
+            Login here
+        </a>
+    </p>
+
+
+</div>
+
+
+{% endblock %}

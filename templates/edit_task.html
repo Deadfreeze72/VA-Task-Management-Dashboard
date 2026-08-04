@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Edit Task
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="task-box">
+
+
+<h2>
+Edit Task
+</h2>
+
+
+
+<form method="POST">
+
+
+<label>
+Task Name
+</label>
+
+
+<input
+
+type="text"
+
+name="title"
+
+value="{{ task.title }}"
+
+required>
+
+
+
+
+<label>
+Priority
+</label>
+
+
+<select name="priority">
+
+
+<option value="High"
+
+{% if task.priority == "High" %}
+selected
+{% endif %}
+
+>
+High
+</option>
+
+
+
+
+<option value="Medium"
+
+{% if task.priority == "Medium" %}
+selected
+{% endif %}
+
+>
+Medium
+</option>
+
+
+
+
+<option value="Low"
+
+{% if task.priority == "Low" %}
+selected
+{% endif %}
+
+>
+Low
+</option>
+
+
+
+</select>
+
+
+
+
+
+<label>
+Change Due Date (days from today)
+</label>
+
+
+<input
+
+type="number"
+
+name="days"
+
+min="1"
+
+max="90"
+
+placeholder="Example: 5"
+
+required>
+
+
+
+
+<button type="submit">
+
+Save Changes
+
+</button>
+
+
+
+</form>
+
+
+
+</div>
+
+
+
+{% endblock %}
