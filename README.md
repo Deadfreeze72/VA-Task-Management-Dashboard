@@ -49,3 +49,25 @@ https://va-task-management-dashboard.onrender.com/
 - Chart.js
 
 ## 📂 Project Structure
+## 📸 Screenshots
+
+### Dashboard
+
+![Dashboard](static/images/dashboard.png)
+
+
+### Statistics
+
+![Statistics](static/images/statistics.png)
+
+
+### Login
+
+![Login](static/images/login.png)
+
+
+## 👨‍💻 Author
+
+**Caesar Weyipe Awariwe**
+
+Virtual Assistant | Data Entry Specialist | Flask Developer
