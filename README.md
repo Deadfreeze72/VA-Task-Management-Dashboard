@@ -1,21 +1,21 @@
 # VA Task Management Dashboard
 
-A professional task management dashboard built for Virtual Assistants to organize, track, and manage daily tasks efficiently.
+A professional task management dashboard designed for Virtual Assistants to organize client tasks, track deadlines, monitor productivity, and manage daily workflows efficiently.
 
-The application provides a clean dashboard interface with user authentication, task tracking, statistics, and export functionality.
+Built with Flask, this application demonstrates practical skills in web development, database management, authentication, task automation, and deployment.
 
 ## 🚀 Live Demo
 
-(Add your Render link here)
+https://va-task-management-dashboard.onrender.com/
 
 ## 📌 Features
 
-### User Management
+### 🔐 User Management
 - User registration
 - Secure login/logout
 - Individual user dashboards
 
-### Task Management
+### ✅ Task Management
 - Create tasks
 - Edit tasks
 - Delete tasks
@@ -23,17 +23,18 @@ The application provides a clean dashboard interface with user authentication, t
 - Set task priorities
 - Automatic due date calculation
 
-### Dashboard
+### 📊 Dashboard
 - Total task overview
 - Completed and pending task statistics
-- Modern responsive interface
+- Clean and responsive dashboard interface
 
-### Analytics
+### 📈 Analytics
 - Task completion charts
 - Priority distribution charts
+- Productivity tracking
 
-### Export
-- Export tasks to CSV format
+### 📁 Export
+- Export tasks into CSV format for reporting and record keeping
 
 ## 🛠️ Technologies Used
 
@@ -42,8 +43,8 @@ The application provides a clean dashboard interface with user authentication, t
 - Flask-SQLAlchemy
 - Flask-Login
 - SQLite Database
-- HTML
-- CSS
+- HTML5
+- CSS3
 - JavaScript
 - Chart.js
 
