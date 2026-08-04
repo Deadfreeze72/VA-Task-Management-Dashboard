@@ -1,5 +1,8 @@
 # VA Task Management Dashboard
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success)](https://va-task-management-dashboard.onrender.com/
+)
+
 A professional task management dashboard designed for Virtual Assistants to organize client tasks, track deadlines, monitor productivity, and manage daily workflows efficiently.
 
 Built with Flask, this application demonstrates practical skills in web development, database management, authentication, task automation, and deployment.
@@ -7,6 +10,12 @@ Built with Flask, this application demonstrates practical skills in web developm
 ## 🚀 Live Demo
 
 https://va-task-management-dashboard.onrender.com/
+
+## 💡 Why I Built This
+
+As I developed my skills as a Virtual Assistant, I realized that managing tasks, deadlines, and priorities efficiently is critical.
+
+This project was built to simulate a real-world productivity tool that helps organize daily workflows, track performance, and improve efficiency using a clean and simple interface.
 
 ## 📌 Features
 
