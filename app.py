@@ -15,36 +15,26 @@ import csv
 import io
 
 
-
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "caesar_dashboard_secret_key"
 
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     "sqlite:///" + os.path.join(basedir, "tasks.db")
 )
 
-
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
 
 
 db = SQLAlchemy(app)
 
 
-
 login_manager = LoginManager()
-
 login_manager.init_app(app)
-
 login_manager.login_view = "login"
-
-
 
 
 
@@ -60,12 +50,10 @@ class User(db.Model, UserMixin):
         primary_key=True
     )
 
-
     name = db.Column(
         db.String(100),
         nullable=False
     )
-
 
     email = db.Column(
         db.String(120),
@@ -73,13 +61,17 @@ class User(db.Model, UserMixin):
         nullable=False
     )
 
-
     password = db.Column(
         db.String(200),
         nullable=False
     )
 
 
+    tasks = db.relationship(
+        "Task",
+        backref="owner",
+        lazy=True
+    )
 
 
 
@@ -123,11 +115,9 @@ class Task(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey("user.id")
+        db.ForeignKey("user.id"),
+        nullable=False
     )
-
-
-
 
 
 
@@ -135,11 +125,6 @@ class Task(db.Model):
 def load_user(user_id):
 
     return User.query.get(int(user_id))
-
-
-
-
-
 
 # =========================
 # REGISTER
@@ -151,21 +136,15 @@ def register():
 
     if request.method == "POST":
 
-
         name = request.form["name"]
-
         email = request.form["email"].lower()
-
         password = request.form["password"]
-
         confirm_password = request.form["confirm_password"]
-
 
 
         existing_user = User.query.filter_by(
             email=email
         ).first()
-
 
 
         if existing_user:
@@ -191,21 +170,14 @@ def register():
 
 
         user = User(
-
             name=name,
-
             email=email,
-
             password=generate_password_hash(password)
-
         )
 
 
-
         db.session.add(user)
-
         db.session.commit()
-
 
 
         flash(
@@ -224,8 +196,6 @@ def register():
 
 
 
-
-
 # =========================
 # LOGIN
 # =========================
@@ -234,14 +204,10 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
-
     if request.method == "POST":
 
-
         email = request.form["email"].lower()
-
         password = request.form["password"]
-
 
 
         user = User.query.filter_by(
@@ -288,8 +254,6 @@ def login():
 
 
 
-
-
 # =========================
 # LOGOUT
 # =========================
@@ -302,8 +266,6 @@ def logout():
     logout_user()
 
     return redirect("/login")
-
-
 
 
 
@@ -328,6 +290,7 @@ def dashboard():
     total = len(tasks)
 
 
+
     completed = len(
         [
             task for task in tasks
@@ -341,21 +304,12 @@ def dashboard():
 
 
     return render_template(
-
         "index.html",
-
         tasks=tasks,
-
         total=total,
-
         completed=completed,
-
         pending=pending
-
     )
-
-
-
 
 
 
@@ -386,7 +340,6 @@ def add_task():
 
     except ValueError:
 
-
         flash(
             "Please enter a valid number of days.",
             "danger"
@@ -396,9 +349,7 @@ def add_task():
 
 
 
-
     if days < 1 or days > 90:
-
 
         flash(
             "Due date must be between 1 and 90 days.",
@@ -406,7 +357,6 @@ def add_task():
         )
 
         return redirect("/")
-
 
 
 
@@ -418,20 +368,12 @@ def add_task():
 
 
 
-
-
     task = Task(
-
         title=title,
-
         priority=priority,
-
         due_date=due,
-
         user_id=current_user.id
-
     )
-
 
 
     db.session.add(task)
@@ -446,10 +388,7 @@ def add_task():
     )
 
 
-
     return redirect("/")
-
-
 
 
 
@@ -475,7 +414,6 @@ def edit(id):
 
 
 
-
     if request.method == "POST":
 
 
@@ -483,39 +421,7 @@ def edit(id):
 
         task.priority = request.form["priority"]
 
-        days_input = request.form["days"]
-
-
-
-        try:
-
-            days = int(days_input)
-
-
-        except ValueError:
-
-            flash(
-                "Please enter a valid number of days.",
-                "danger"
-            )
-
-            return redirect(
-                f"/edit/{id}"
-            )
-
-
-
-
-        if days < 1 or days > 90:
-
-            flash(
-                "Due date must be between 1 and 90 days.",
-                "danger"
-            )
-
-            return redirect(
-                f"/edit/{id}"
-            )
+        days = int(request.form["days"])
 
 
 
@@ -550,8 +456,6 @@ def edit(id):
 
 
 
-
-
 # =========================
 # COMPLETE TASK
 # =========================
@@ -568,18 +472,13 @@ def complete(id):
 
     if task.user_id == current_user.id:
 
-
         task.status = "Completed"
-
 
         db.session.commit()
 
 
 
     return redirect("/")
-
-
-
 
 
 
@@ -601,7 +500,6 @@ def delete(id):
 
     if task.user_id == current_user.id:
 
-
         db.session.delete(task)
 
         db.session.commit()
@@ -609,11 +507,6 @@ def delete(id):
 
 
     return redirect("/")
-
-
-
-
-
 
 
 # =========================
@@ -673,22 +566,13 @@ def stats():
 
 
     return render_template(
-
         "stats.html",
-
         completed=completed,
-
         pending=pending,
-
         high=high,
-
         medium=medium,
-
         low=low
-
     )
-
-
 
 
 
@@ -718,7 +602,6 @@ def export():
 
 
     writer.writerow(
-
         [
             "Task",
             "Priority",
@@ -726,16 +609,13 @@ def export():
             "Due Date",
             "Created Date"
         ]
-
     )
 
 
 
     for task in tasks:
 
-
         writer.writerow(
-
             [
                 task.title,
                 task.priority,
@@ -743,7 +623,6 @@ def export():
                 task.due_date,
                 task.created
             ]
-
         )
 
 
@@ -753,21 +632,26 @@ def export():
 
 
     return Response(
-
         output,
-
         mimetype="text/csv",
-
         headers={
-
             "Content-Disposition":
             "attachment; filename=my_tasks.csv"
-
         }
-
     )
 
 
+
+
+
+# =========================
+# CREATE DATABASE
+# =========================
+
+
+with app.app_context():
+
+    db.create_all()
 
 
 
@@ -779,12 +663,5 @@ def export():
 
 
 if __name__ == "__main__":
-
-
-    with app.app_context():
-
-        db.create_all()
-
-
 
     app.run(debug=True)
