@@ -1,6 +1,6 @@
 # VA Task Management Dashboard
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-success)](https://va-task-management-dashboard.onrender.com/
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success)](https://va-task-management-dashboard.onrender.com/login
 )
 
 A professional task management dashboard designed for Virtual Assistants to organize client tasks, track deadlines, monitor productivity, and manage daily workflows efficiently.

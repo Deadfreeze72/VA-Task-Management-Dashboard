@@ -21,6 +21,7 @@ Login
 
     <form method="POST" autocomplete="off">
 
+        {{ csrf_token() }}
 
         <label>
             Email Address
@@ -87,3 +88,4 @@ Login
 
 
 {% endblock %}
+
