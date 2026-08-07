@@ -45,6 +45,20 @@ This project was built to simulate a real-world productivity tool that helps org
 ### 📁 Export
 - Export tasks into CSV format for reporting and record keeping
 
+## 🔒 Security
+
+[#-security](#-security)
+
+This project follows several security best practices:
+
+- **Environment-based secrets** — the Flask `SECRET_KEY` is loaded from an environment variable rather than hardcoded in source, so it's never exposed in version control.
+- **CSRF protection** — every form (login, register, add task, edit task, complete, delete) is protected against cross-site request forgery using Flask-WTF.
+- **Password hashing** — user passwords are hashed with Werkzeug's `generate_password_hash` before being stored; plaintext passwords are never saved.
+- **State-changing actions require POST** — completing or deleting a task can no longer be triggered by simply visiting a link; both require an authenticated POST request.
+- **Ownership checks** — every task action verifies the task belongs to the logged-in user before allowing edits, completion, or deletion.
+- **Generic auth error messages** — login failures return a single generic message rather than revealing whether a given email is registered.
+- **Debug mode off by default** — the app only runs with Flask's debug mode enabled when explicitly configured via an environment variable, preventing accidental exposure of stack traces in production.
+
 ## 🛠️ Technologies Used
 
 - Python
