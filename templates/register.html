@@ -14,7 +14,7 @@ Register
 
     <form method="POST" autocomplete="off">
 
-        {{ csrf_token() }}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <label>
             Full Name

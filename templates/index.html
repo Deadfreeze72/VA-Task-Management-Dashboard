@@ -53,7 +53,7 @@ Dashboard
 
     <form action="/add" method="POST">
 
-        {{ csrf_token() }}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <input 
         type="text"
@@ -301,7 +301,7 @@ Pending
 {% if task.status != "Completed" %}
 
 <form method="POST" action="{{ url_for('complete', id=task.id) }}" style="display:inline">
-    {{ csrf_token() }}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <button type="submit" class="link-button">Complete</button>
 </form>
 
@@ -317,7 +317,7 @@ Edit
 
 
 <form method="POST" action="{{ url_for('delete', id=task.id) }}" style="display:inline">
-    {{ csrf_token() }}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <button type="submit" class="link-button" onclick="return confirm('Delete this task?')">Delete</button>
 </form>
 
