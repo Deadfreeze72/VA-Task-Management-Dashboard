@@ -56,6 +56,7 @@ class User(db.Model, UserMixin):
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
+    client = db.Column(db.String(100), default="General")
     priority = db.Column(db.String(50), default="Medium")
     status = db.Column(db.String(50), default="Pending")
     due_date = db.Column(db.String(50))
@@ -157,17 +158,45 @@ def logout():
 @app.route("/")
 @login_required
 def dashboard():
-    tasks = Task.query.filter_by(user_id=current_user.id).all()
-    total = len(tasks)
-    completed = len([task for task in tasks if task.status == "Completed"])
+    search = request.args.get("search", "").strip()
+    status_filter = request.args.get("status", "all")
+    client_filter = request.args.get("client", "all")
+
+    query = Task.query.filter_by(user_id=current_user.id)
+
+    if search:
+        query = query.filter(Task.title.ilike(f"%{search}%"))
+
+    if status_filter == "pending":
+        query = query.filter(Task.status != "Completed")
+    elif status_filter == "completed":
+        query = query.filter(Task.status == "Completed")
+
+    if client_filter != "all":
+        query = query.filter(Task.client == client_filter)
+
+    tasks = query.all()
+
+    # Totals should reflect ALL of the user's tasks, not just the filtered
+    # view, so the stat cards stay accurate no matter what's searched.
+    all_tasks = Task.query.filter_by(user_id=current_user.id).all()
+    total = len(all_tasks)
+    completed = len([task for task in all_tasks if task.status == "Completed"])
     pending = total - completed
+
+    # Distinct client names this user has used, for the filter dropdown.
+    clients = sorted({task.client or "General" for task in all_tasks})
 
     return render_template(
         "index.html",
         tasks=tasks,
         total=total,
         completed=completed,
-        pending=pending
+        pending=pending,
+        search=search,
+        status_filter=status_filter,
+        client_filter=client_filter,
+        clients=clients
     )
 
 
@@ -178,6 +207,7 @@ def dashboard():
 @login_required
 def add_task():
     title = request.form.get("title", "").strip()
+    client = request.form.get("client", "").strip() or "General"
     priority = request.form.get("priority", "Medium")
     days_input = request.form.get("days", "")
 
@@ -202,6 +232,7 @@ def add_task():
 
     task = Task(
         title=title,
+        client=client,
         priority=priority,
         due_date=due,
         user_id=current_user.id
@@ -227,6 +258,7 @@ def edit(id):
 
     if request.method == "POST":
         title = request.form.get("title", "").strip()
+        client = request.form.get("client", "").strip() or "General"
         priority = request.form.get("priority", "Medium")
         days_input = request.form.get("days", "")
 
@@ -248,6 +280,7 @@ def edit(id):
             return redirect(f"/edit/{id}")
 
         task.title = title
+        task.client = client
         task.priority = priority
         task.due_date = (datetime.today() + timedelta(days=days)).strftime("%Y-%m-%d")
         db.session.commit()
@@ -330,10 +363,10 @@ def export():
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["Task", "Priority", "Status", "Due Date", "Created Date"])
+    writer.writerow(["Task", "Client", "Priority", "Status", "Due Date", "Created Date"])
 
     for task in tasks:
-        writer.writerow([task.title, task.priority, task.status, task.due_date, task.created])
+        writer.writerow([task.title, task.client, task.priority, task.status, task.due_date, task.created])
 
     output.seek(0)
     return Response(
