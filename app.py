@@ -9,6 +9,8 @@ from flask_login import (
     current_user
 )
 from flask_wtf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 import os
@@ -35,6 +37,15 @@ db = SQLAlchemy(app)
 
 # CSRF protection for every POST form in the app.
 csrf = CSRFProtect(app)
+
+# Rate limiting -- protects against brute-force login/registration attempts.
+# Limits are per IP address. No storage backend configured means it uses
+# in-memory storage, which is fine for a single-instance app like this.
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"]
+)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -72,10 +83,17 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    flash("Too many attempts. Please wait a minute and try again.", "danger")
+    return redirect(request.referrer or "/login")
+
+
 # =========================
 # REGISTER
 # =========================
 @app.route("/register", methods=["GET", "POST"])
+@limiter.limit("10 per hour")
 def register():
     if request.method == "POST":
         name = request.form.get("name", "").strip()
@@ -123,6 +141,7 @@ def register():
 # LOGIN
 # =========================
 @app.route("/login", methods=["GET", "POST"])
+@limiter.limit("6 per minute")
 def login():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
