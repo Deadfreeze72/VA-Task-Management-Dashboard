@@ -77,13 +77,24 @@ VA-Task-Management-Dashboard/
 ├── app.py              # Main Flask application (routes, login, task logic)
 ├── requirements.txt    # Python packages needed to run the app
 ├── Procfile            # Start command used for deployment on Render
-├── tasks.db            # SQLite database
 ├── README.md           # Project description
+├── .gitignore          # Files Git should ignore
 │
-├── instance/           # Flask instance folder (local configuration/data)
-├── templates/          # HTML pages (login, dashboard, statistics)
-└── static/             # CSS, JavaScript, and images
-    └── images/         # Screenshots used in the README
+├── instance/
+│   └── tasks.db        # SQLite database
+│
+├── templates/          # HTML pages
+│   ├── base.html       # Shared layout used by all pages
+│   ├── index.html      # Main dashboard with task list and client filter
+│   ├── edit_task.html  # Edit an existing task
+│   ├── login.html      # User login page
+│   ├── register.html   # New user registration page
+│   └── stats.html      # Statistics and charts page
+│
+└── static/
+    └── images/
+        ├── styles.css  # Stylesheet for the app
+        └── (screenshots used in the README)
 
 ## 📸 Screenshots
 
