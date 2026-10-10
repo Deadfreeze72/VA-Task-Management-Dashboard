@@ -72,6 +72,19 @@ This project follows several security best practices:
 - Chart.js
 
 ## 📂 Project Structure
+VA-Task-Management-Dashboard/
+│
+├── app.py              # Main Flask application (routes, login, task logic)
+├── requirements.txt    # Python packages needed to run the app
+├── Procfile            # Start command used for deployment on Render
+├── tasks.db            # SQLite database
+├── README.md           # Project description
+│
+├── instance/           # Flask instance folder (local configuration/data)
+├── templates/          # HTML pages (login, dashboard, statistics)
+└── static/             # CSS, JavaScript, and images
+    └── images/         # Screenshots used in the README
+
 ## 📸 Screenshots
 
 ### Dashboard
